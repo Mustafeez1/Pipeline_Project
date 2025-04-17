@@ -44,9 +44,18 @@ pipeline {
                     if [ ! -z "$PID" ]; then
                         echo "Killing process on port 5000 (PID: $PID)"
                         kill -9 $PID
+                        sleep 3
                     else
                         echo "Port 5000 is free."
                     fi
+
+                    # Confirm the port is actually free
+                    while lsof -ti :5000 > /dev/null; do
+                        echo "Waiting for port 5000 to be free..."
+                        sleep 2
+                    done
+
+                    echo "Port 5000 is now free."
                 '''
             }
         }
