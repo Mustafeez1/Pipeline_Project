@@ -4,6 +4,6 @@ services:
   titanic-app:
     build: .
     ports:
-      - "5000:5000"  # Bind directly to avoid confusion
+      - "${FLASK_PORT:-5000}:5000"  # Dynamically assigned port
     container_name: titanic_prediction_container
-    restart: unless-stopped  # Safer than always
+    restart: unless-stopped
