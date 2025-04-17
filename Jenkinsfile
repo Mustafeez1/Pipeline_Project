@@ -14,13 +14,13 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t titanic-app .'
+                sh '/bin/sh -c "docker build -t titanic-app ."'  // Use the full path to bash or sh
             }
         }
         
         stage('Run Docker Container') {
             steps {
-                sh 'docker-compose up -d'
+                sh '/bin/sh -c "docker-compose up -d"'  // Same here
             }
         }
     }
