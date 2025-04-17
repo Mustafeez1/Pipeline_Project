@@ -24,6 +24,19 @@ pipeline {
             }
         }
 
+        stage('Remove Existing Container') {
+            steps {
+                sh '''
+                    if [ "$(docker ps -aq -f name=titanic_prediction_container)" ]; then
+                        echo "Removing existing container..."
+                        docker rm -f titanic_prediction_container
+                    else
+                        echo "No existing container to remove."
+                    fi
+                '''
+            }
+        }
+
         stage('Run Docker Container') {
             steps {
                 sh '/bin/sh -c "docker-compose up -d"'
@@ -31,3 +44,4 @@ pipeline {
         }
     }
 }
+
