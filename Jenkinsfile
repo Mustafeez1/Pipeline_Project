@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        PATH = "/usr/local/bin/docker"  // Add Docker's path here
+        PATH = "/usr/local/bin:/opt/homebrew/bin:/bin:/usr/bin:/usr/sbin:/sbin"
     }
 
     stages {
@@ -12,15 +12,21 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Sanity Check') {
             steps {
-                sh '/bin/bash -c "docker build -t titanic-app ."'  // Full path to bash
+                sh '/bin/sh -c "echo Shell OK && which docker && docker --version"'
             }
         }
-        
+
+        stage('Build Docker Image') {
+            steps {
+                sh '/bin/sh -c "docker build -t titanic-app ."'
+            }
+        }
+
         stage('Run Docker Container') {
             steps {
-                sh '/bin/bash -c "docker-compose up -d"'  // Full path to bash
+                sh '/bin/sh -c "docker-compose up -d"'
             }
         }
     }
