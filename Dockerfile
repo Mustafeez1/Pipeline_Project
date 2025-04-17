@@ -4,15 +4,14 @@ FROM python:3.10-slim
 # Set working directory
 WORKDIR /app
 
-# Copy only necessary files (this can help with better caching during builds)
-COPY requirements.txt /app/
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy the rest of the project files
+# Copy files
 COPY . /app
 
-# Expose the specific port (e.g., 8080)
-EXPOSE 8080
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Run the application on port 8080
+# Expose the port Flask runs on
+EXPOSE 9090  # Port set to 9090
+
+# Run the application
 CMD ["python", "app.py"]
