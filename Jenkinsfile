@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        PATH = "/usr/local/bin/docker"  // Add Docker's path here
+    }
+
     stages {
         stage('Clone repository') {
             steps {
@@ -10,17 +14,13 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    docker.build('titanic-app')
-                }
+                sh '/bin/bash -c "docker build -t titanic-app ."'  // Full path to bash
             }
         }
-
+        
         stage('Run Docker Container') {
             steps {
-                script {
-                    docker.image('titanic-app').run('-d')
-                }
+                sh '/bin/bash -c "docker-compose up -d"'  // Full path to bash
             }
         }
     }
