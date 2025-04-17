@@ -1,13 +1,9 @@
 from flask import Flask, request, jsonify, render_template
 import pickle
 import numpy as np
-import os
 
 app = Flask(__name__)
 model = pickle.load(open('titanic_prediction.pkl', 'rb'))
-
-# Get the port from the environment variable, default to 5000 if not set
-port = int(os.getenv('FLASK_PORT', 5000))
 
 @app.route('/')
 def home():
@@ -24,5 +20,4 @@ def predict():
         return render_template('index.html', prediction_text=f'Error: {str(e)}')
 
 if __name__ == "__main__":
-    # Run the app on the port dynamically set by the environment variable
-    app.run(host='0.0.0.0', port=port)
+    app.run(host='0.0.0.0', port=8080)  # Change port to 8080
