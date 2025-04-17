@@ -11,7 +11,7 @@ COPY . /app
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Expose the port Flask runs on
-EXPOSE 9090  # Port set to 9090
+EXPOSE 9090  
 
 # Run the application
 CMD ["python", "app.py"]
