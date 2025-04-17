@@ -37,6 +37,20 @@ pipeline {
             }
         }
 
+        stage('Free Port 5000') {
+            steps {
+                sh '''
+                    PID=$(lsof -ti :5000)
+                    if [ ! -z "$PID" ]; then
+                        echo "Killing process on port 5000 (PID: $PID)"
+                        kill -9 $PID
+                    else
+                        echo "Port 5000 is free."
+                    fi
+                '''
+            }
+        }
+
         stage('Run Docker Container') {
             steps {
                 sh '/bin/sh -c "docker-compose up -d"'
@@ -44,4 +58,3 @@ pipeline {
         }
     }
 }
-
