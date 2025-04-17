@@ -4,6 +4,6 @@ services:
   titanic-app:
     build: .
     ports:
-      - "8080:8080"  # Map container's port 8080 to host's port 8080
+      - "9090:9090"  # Port set to 9090
     container_name: titanic_prediction_container
     restart: always
