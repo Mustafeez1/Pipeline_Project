@@ -37,32 +37,38 @@ pipeline {
             }
         }
 
-        stage('Free Port 5000') {
+        stage('Find Available Port') {
             steps {
-                sh '''
-                    PID=$(lsof -ti :5000)
-                    if [ ! -z "$PID" ]; then
-                        echo "Killing process on port 5000 (PID: $PID)"
-                        kill -9 $PID
-                        sleep 3
-                    else
-                        echo "Port 5000 is free."
-                    fi
+                script {
+                    // Find the first available port starting from 5000
+                    def port = 5000
+                    def maxPort = 5100
+                    while (port <= maxPort) {
+                        def result = sh(script: "lsof -ti :${port}", returnStatus: true)
+                        if (result != 0) {
+                            echo "Port ${port} is available."
+                            env.FLASK_PORT = port.toString()
+                            break
+                        } else {
+                            echo "Port ${port} is in use, trying next one."
+                            port++
+                        }
+                    }
 
-                    # Confirm the port is actually free
-                    while lsof -ti :5000 > /dev/null; do
-                        echo "Waiting for port 5000 to be free..."
-                        sleep 2
-                    done
-
-                    echo "Port 5000 is now free."
-                '''
+                    // If all ports are occupied, fail the build
+                    if (port > maxPort) {
+                        error "No available ports between 5000 and 5100"
+                    }
+                }
             }
         }
 
         stage('Run Docker Container') {
             steps {
-                sh '/bin/sh -c "docker-compose up -d"'
+                sh '''
+                    echo "Starting container on port ${FLASK_PORT}"
+                    docker-compose -f docker-compose.yml up -d
+                '''
             }
         }
     }
