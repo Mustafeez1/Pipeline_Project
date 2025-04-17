@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         PATH = "/usr/local/bin:/opt/homebrew/bin:/bin:/usr/bin:/usr/sbin:/sbin"
+        FLASK_PORT = "8080"  // Set the port to 8080
     }
 
     stages {
@@ -34,32 +35,6 @@ pipeline {
                         echo "No existing container to remove."
                     fi
                 '''
-            }
-        }
-
-        stage('Find Available Port') {
-            steps {
-                script {
-                    // Find the first available port starting from 5000
-                    def port = 5000
-                    def maxPort = 5100
-                    while (port <= maxPort) {
-                        def result = sh(script: "lsof -ti :${port}", returnStatus: true)
-                        if (result != 0) {
-                            echo "Port ${port} is available."
-                            env.FLASK_PORT = port.toString()
-                            break
-                        } else {
-                            echo "Port ${port} is in use, trying next one."
-                            port++
-                        }
-                    }
-
-                    // If all ports are occupied, fail the build
-                    if (port > maxPort) {
-                        error "No available ports between 5000 and 5100"
-                    }
-                }
             }
         }
 
