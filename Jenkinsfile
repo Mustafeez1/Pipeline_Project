@@ -10,17 +10,12 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    docker.build('titanic-predictor')
-                }
+                sh 'docker build -t titanic-app .'
             }
         }
-
         stage('Run Docker Container') {
             steps {
-                script {
-                    docker.image('titanic-predictor').run('-p 5000:5000')
-                }
+                sh 'docker-compose up -d'
             }
         }
     }
