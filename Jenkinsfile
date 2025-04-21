@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         PATH = "/usr/local/bin:/opt/homebrew/bin:/bin:/usr/bin:/usr/sbin:/sbin"
-        FLASK_PORT = "5050"  // Set the port to 9090
+        FLASK_PORT = "10000"  // Set the port to 9090
     }
 
     stages {
