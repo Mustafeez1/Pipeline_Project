@@ -4,6 +4,6 @@ services:
   titanic-app:
     build: .
     ports:
-      - "5000:5000"  # Port set to 9090
+      - "5050:5050"  # Port set to 9090
     container_name: titanic_prediction_container
     restart: always
